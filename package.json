@@ -10,6 +10,7 @@
     "egg-scripts": "^2.5.0",
     "egg-view": "^2.1.1",
     "egg-view-ejs": "^2.0.0",
+    "moment": "^2.23.0",
     "mongoose": "^5.4.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",

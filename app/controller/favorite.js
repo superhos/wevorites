@@ -18,6 +18,7 @@ class FavoriteController extends Controller {
     await this.ctx.render('show.html',{
       title,
       memberId,
+      member: JSON.stringify(member),
       webServer: this.ctx.app.config.webURL
     });
   }
@@ -36,7 +37,7 @@ class FavoriteController extends Controller {
       sort:{
           create_at: -1 //Sort by Date Added DESC
       }
-    })
+    }).populate('memberId').exec()
 
     this.ctx.body = JSON.stringify(favs)
   }
@@ -64,6 +65,33 @@ class FavoriteController extends Controller {
     }
     
     this.ctx.body = JSON.stringify(doc)
+  }
+
+  async update () {
+    const favId = this.ctx.params.id
+    const favData = this.ctx.request.body.favData
+
+    const doc = await this.ctx.model.Favorite
+      .findOneAndUpdate(
+        {
+          "_id": favId
+        }, 
+        {
+          ...favData   // field:values to update
+        },
+        {
+          new: true,                       // return updated doc
+          runValidators: true              // validate before update
+        })
+    
+      if (!doc) {
+        this.ctx.body = JSON.stringify({
+          state: '401',
+          msg: 'Document not found.'
+        })
+
+        return
+      }
   }
 }
 

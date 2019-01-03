@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%-title%></title>
     <link rel="stylesheet" href="/public/css/style.css">
@@ -22,26 +22,38 @@
             <div class="container">
                 <ul>
                     <li :key="item._id" v-for="item in list">
-                        <a :href="item.url" target="_blank">
-                            <div class="block">
-                                <div class="mask"></div>
-                                <img src="http://iph.href.lu/195x119?text=缩略图拉取中" />
-                                <span>{{cut(item.title)}}</span>
+                        <div class="block">
+                            <div class="state" :class="'state-' + item.state">
+                                {{item.state === 0 ? '未读' : '已读'}}
                             </div>
-                        </a>
+                            <div class="center">
+                                <a :href="item.url" target="_blank">
+                                    <span>{{cut(item.title)}}</span>
+                                </a>
+                                    <div class="meta-info">
+                                        <img class="avatar" :src="item.memberId.avatar_url" />
+                                        <span>收藏于 {{moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}}</span>
+                                    </div>
+                                    <div class="foot">
+                                        标记为: <button>已读</button>
+                                    </div>
+                                </div>
+                            </div>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"></script>
     <script>
         var app = new Vue({
             el: '#app',
             data: {
                 list: [],
                 serverURL: '<%-webServer%>',
-                memberId: '<%-memberId%>'
+                memberId: '<%-memberId%>',
+                memberInfo: JSON.parse('<%-member%>')
             },
             mounted () {
                 fetch(`${this.serverURL}/list/${this.memberId}`).then((res) => {
@@ -66,7 +78,7 @@
                             len ++
                         }
 
-                        if (len >= 40) {
+                        if (len >= 60) {
                             res = '...'
                             break
                         }

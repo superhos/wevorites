@@ -3,6 +3,18 @@ html,body {
   padding:0;
 }
 
+a {
+  text-decoration:none;
+}
+
+a:hover {
+  text-decoration:underline;
+}
+
+a:visited {
+  color: #000;
+}
+
 header {
   background: #191919;
   height: 60px;
@@ -56,10 +68,12 @@ header .logo {
   height: 100%;
   width: 100%;
   min-height:500px;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
 
 .content .container {
-  width: 860px;
+  width: 460px;
   min-height: 80px;
   margin: 0 auto;
 }
@@ -71,12 +85,10 @@ header .logo {
 }
 
 .content .container ul li {
-  width: 25%;
-  float:left;
-  height: 190px;
+  width: 100%;
   box-sizing: border-box;
-  padding: 10px;
   overflow: hidden;
+  height:80px;
 }
 
 .content .container ul:after {
@@ -88,25 +100,80 @@ header .logo {
 .content .container ul li .block {
   width:100%;
   height:100%;
-  border-radius: 6px 6px 3px 3px;
   box-sizing: border-box;
   color: #191919;
   float: left;
-  margin: 0 20px 20px 0;
-  position: relative;
   text-align: left;
-  background-color: #fff;
-  box-shadow: 0 1px 2px rgba(25,25,25,0.2);
   cursor: pointer;
-  position: relative;
+  display:flex;
 }
 
-.content .container ul li .block span {
-  padding: 5px 10px;
-  font-size: 13px;
+.content .container ul li .block div.state{
+  border:1px solid #df2727;
+  background: #df2727;
+  border-radius: 5px;
+  color:#FFF;
+  width:30px;
+  font-size:12px;
+  height:20px;
+  line-height: 20px;
+  text-align: center;
+  justify-content: flex-start;
+}
+
+.content .container ul li .block div.center {
+  padding: 0 10px;
   width: 100%;
   box-sizing: border-box;
-  display: block;
+  justify-content: center;
+}
+
+.content .container ul li .block div.center > span {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.content .container ul li .block div.center .meta-info {
+  display: flex;
+  align-items: center;
+  margin-top:5px;
+}
+
+.content .container ul li .block div.center .meta-info .avatar{
+  width:22px;
+  height:22px;
+  border-radius: 50px;
+}
+
+.content .container ul li .block div.center .meta-info span {
+  font-size: 13px;
+  color:#6c6c6c;
+  margin-left:8px;
+}
+
+.content .container ul li .block div.center > span:hover {
+  text-decoration: underline;
+}
+
+.content .container ul li .block div.center .foot {
+  text-align: right;
+  font-size: 13px;
+  color: #222;
+  opacity: 0;
+}
+
+.content .container ul li .block:hover div.center .foot {
+  animation-name:slideDown;
+  animation-duration:1s;
+  animation-fill-mode: forwards;
+  opacity: 1;
+}
+
+.content .container ul li .block div.center .foot button {
+  border:0;
+  box-shadow: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 .content .container ul li .block img {
@@ -135,5 +202,31 @@ header .logo {
   }
   to{
     background:rgba(0,0,0,0.3);
+  }
+}
+
+@keyframes slideDown{
+  from{
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+  to{
+    transform: translateY(0px)
+    opacity: 1;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  .title {
+    height: 180px;
+  }
+
+  .content .container {
+    width: 100%;
+  }
+
+  .content .container ul li {
+    width: 100%;
   }
 }
