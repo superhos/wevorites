@@ -1,0 +1,41 @@
+html,body {
+  margin:0;
+  padding:0;
+}
+
+header {
+  background: #191919;
+  height: 60px;
+  width: 100%;
+  z-index: 5;
+  padding:0 20px;
+  box-sizing: border-box;
+}
+
+header .logo {
+  float:left;
+  color: #FFF;
+  font-size: 25px;
+  line-height: 60px;
+  font-family: 'Staatliches', cursive;
+}
+
+.title {
+  font-family: "acumin-pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px #f2f2f2 solid;
+  box-sizing: border-box;
+  color: #000;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  font-family: "acumin-pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+  height: 240px;
+}

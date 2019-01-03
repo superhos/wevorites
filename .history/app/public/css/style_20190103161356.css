@@ -1,0 +1,21 @@
+html,body {
+  margin:0;
+  padding:0;
+}
+
+header {
+  background: #191919;
+  height: 60px;
+  width: 100%;
+  z-index: 5;
+  padding:0 20px;
+  box-sizing: border-box;
+}
+
+header .logo {
+  float:left;
+  color: #FFF;
+  font-size: 25px;
+  line-height: 60px;
+  font-family: 'Staatliches', cursive;
+}

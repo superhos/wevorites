@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%-title%></title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link href="/public/css/font.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 使用模板数据 -->
+    <div id="app">
+        <header>
+            <div class="logo">Wevorites</div>
+        </header>
+        <div class="title">
+            <h1><%-title%>收藏馆</h1>
+            <h4>偶然遇到的宝藏</h4>
+        </div>
+        <div class="content">
+            <div class="container">
+                <ul>
+                    <li :key="item._id" v-for="item in list">
+                        <div class="block">
+                            <img :src="item.thumb" />
+                            <span>{{cut(item.title)}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                list: [],
+                serverURL: '<%-webServer%>',
+                memberId: '<%-memberId%>'
+            },
+            mounted () {
+                fetch(`${this.serverURL}/list/${this.memberId}`).then((res) => {
+                    if (res.status === 200 && res.ok) {
+                        return res.json()
+                    } else {
+                        console.err('NetworkError')
+                    }
+                }).then(jsonRes => {
+                    this.list = jsonRes
+                })
+            },
+            methods: {
+                cut (str) {
+                    let len = 0
+                    let res = ""
+                    for (var i = 0; i < str.length; i++) {
+                        let s = str[i]
+                        if (s.toString().match(/[\u3400-\u9FBF]/)) {
+                            len += 2
+                        } else {
+                            len ++
+                        }
+
+                        if (len >= 20) {
+                            break
+                        }
+                    }
+
+                    return str.substring(0,i) + len >= 20 ? '...' : ''
+                }
+            }
+        })
+    </script>
+</body>
+</html>

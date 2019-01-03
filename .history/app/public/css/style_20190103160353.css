@@ -1,0 +1,7 @@
+header {
+  background: #191919;
+  height: 60px;
+  position: fixed;
+  width: 100%;
+  z-index: 5;
+}

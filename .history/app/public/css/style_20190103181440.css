@@ -1,0 +1,138 @@
+html,body {
+  margin:0;
+  padding:0;
+}
+
+header {
+  background: #191919;
+  height: 60px;
+  width: 100%;
+  z-index: 5;
+  padding:0 20px;
+  box-sizing: border-box;
+}
+
+header .logo {
+  float:left;
+  color: #FFF;
+  font-size: 25px;
+  line-height: 60px;
+  font-family: 'Staatliches', cursive;
+}
+
+.title {
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px #f2f2f2 solid;
+  color: #000;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  font-family: "acumin-pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+  height: 120px;
+  padding: 80px 0;
+}
+
+.title h1 {
+  font-size:60px;
+  width: 100%;
+  margin:0;
+}
+
+.title h4 {
+  font-weight: 100;
+  font-size: 30px;
+  margin:0;
+}
+
+.content {
+  background: #f9f9f9;
+  height: 100%;
+  width: 100%;
+}
+
+.content .container {
+  width: 860px;
+  min-height: 80px;
+  margin: 0 auto;
+}
+
+.content .container ul {
+  margin: 0;
+  list-style: none;
+  padding: 30px 0;
+}
+
+.content .container ul li {
+  width: 25%;
+  float:left;
+  height: 190px;
+  box-sizing: border-box;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.content .container ul:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.content .container ul li .block {
+  width:100%;
+  height:100%;
+  border-radius: 6px 6px 3px 3px;
+  box-sizing: border-box;
+  color: #191919;
+  float: left;
+  margin: 0 20px 20px 0;
+  position: relative;
+  text-align: left;
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(25,25,25,0.2);
+  cursor: pointer;
+  position: relative;
+}
+
+.content .container ul li .block span {
+  padding: 5px 10px;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+
+.content .container ul li .block img {
+  width: 100%;
+  height: 70%;
+} 
+
+.content .container ul li .block .mask {
+  position: absolute;
+  left:0;
+  top:0;
+  width: 100%;
+  height: 70%;
+} 
+
+.content .container ul li .block .mask:hover {
+  background:rgba(0,0,0,0.3);
+  animation-name:shadow;
+  animation-duration:.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes shadow{
+  from{
+    background:rgba(0,0,0,0);
+  }
+  to{
+    background:rgba(0,0,0,0.3);
+  }
+}
