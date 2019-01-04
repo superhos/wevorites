@@ -1,11 +1,22 @@
-FROM node:carbon
-# Create app directory
+FROM node:8.6.0-alpine
+
+RUN apk --update add tzdata \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apk del tzdata
+
+RUN mkdir -p /usr/src/app
+
 WORKDIR /usr/src/app
-# Install app dependencies
-COPY package*.json ./
-RUN npm install
-# Copy app source code
-COPY . .
-#Expose port and start application
-EXPOSE 8080
-CMD [ "npm", "start" ]
+
+# add npm package
+COPY package.json /usr/src/app/package.json
+
+RUN npm i --registry=https://registry.npm.taobao.org
+
+# copy code
+COPY . /usr/src/app
+
+EXPOSE 7001
+
+CMD npm start
