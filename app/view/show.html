@@ -87,7 +87,7 @@
                 serverURL: '<%-webServer%>',
                 memberId: '<%-memberId%>',
                 showTip: true,
-                loading : true,
+                loading : false,
                 color: '#525252',
                 size: '15',
                 showSearch: false,
@@ -179,6 +179,7 @@
                     this.load()
                 },
                 load () {
+                    if (this.loading) return
                     this.loading = true
                     fetch(`${this.serverURL}/api/favorite?memberId=${this.memberId}&persize=${this.persize}&curindex=${this.curindex}&search=${this.searchContent}`)
                     .then((res) => {
@@ -191,10 +192,12 @@
                     }).then(jsonRes => {
                         if (+jsonRes.state === 200) {
                             if (jsonRes.data.length === 0) this.canLoad = false
+                            console.log(this.list)
                             this.list = [
                                 ...this.list,
                                 ...jsonRes.data
                             ]
+                            console.log(this.list)
                             this.curindex += this.persize
                         } else {
                             notifier.warning('加载失败')

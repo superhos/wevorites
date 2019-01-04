@@ -37,25 +37,27 @@ module.exports = app => {
     }
 
     // 判断资源是否属于当前访问人
-    const favId = ctx.params.id
-    const curFav = await ctx.model.Favorite.findOne({
-      _id: favId
-    }).exec()
+    if (ctx.request.method !== 'POST') {
+      const favId = ctx.params.id
+      const curFav = await ctx.model.Favorite.findOne({
+        _id: favId
+      }).exec()
 
-    if (!curFav) {
-      ctx.body = JSON.stringify({
-        state: '404',
-        msg: 'Fav doesn\'t exist.'
-      })
-      return
-    }
+      if (!curFav) {
+        ctx.body = JSON.stringify({
+          state: '404',
+          msg: 'Fav doesn\'t exist.'
+        })
+        return
+      }
 
-    if (member._id.toString() !== curFav.memberId.toString()) {
-      ctx.body = JSON.stringify({
-        state: '403',
-        msg: 'No Permission'
-      })
-      return
+      if (member._id.toString() !== curFav.memberId.toString()) {
+        ctx.body = JSON.stringify({
+          state: '403',
+          msg: 'No Permission'
+        })
+        return
+      }
     }
 
     await next()
