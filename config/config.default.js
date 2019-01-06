@@ -4,7 +4,7 @@ module.exports = appInfo => {
 
   const config = exports = {};
 
-  config.webURL = 'http://localhost:7001'
+  config.webURL = process.env.WEB_URL
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1546418708365_8550';
@@ -19,7 +19,7 @@ module.exports = appInfo => {
 
   config.mongoose = {
     client: {
-      url: 'mongodb://127.0.0.1:27019/wevorites',
+      url: 'mongodb://mongo:27019/wevorites',
       options: {},
     },
   };
