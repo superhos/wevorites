@@ -9,8 +9,8 @@ services:
     - mongo
   mongo:
     image: mongo
-     volumes:
-     - "../data:/data/db"
-     - "/etc/localtime:/etc/localtime"
+    volumes:
+    - "../data:/data/db"
+    - "/etc/localtime:/etc/localtime"
     ports:
     - "27019:27017"

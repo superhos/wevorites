@@ -30,6 +30,11 @@ class FavoriteController extends Controller {
       selfInfo = await this.ctx.model.Member.findOne({
         _id: this.ctx.session.info.sessionMember
       }).exec()
+
+      if (!selfInfo) {
+        isLogin = false
+        this.ctx.session.info = null
+      }
     }
 
     // // this.ctx.body = 'hi, egg';
