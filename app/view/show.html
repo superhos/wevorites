@@ -45,7 +45,7 @@
         </div>
         <div class="content">
             <div class="container">
-                <ul>
+                <ul v-show="isInit">
                     <li :key="item._id" v-for="item in list">
                         <div class="block">
                             <div class="state" :class="'state-' + item.state">
@@ -100,7 +100,8 @@
                 selfInfo: JSON.parse('<%-selfInfo%>'),
                 memberInfo: JSON.parse('<%-member%>'),
                 persize: 6,
-                curindex: 0
+                curindex: 0,
+                isInit: false
             },
             mounted () {
                 this.load()
@@ -155,7 +156,12 @@
                 remove (favId) {
                     notifier.confirm('确认移除该收藏?', () => {
                         fetch(`${this.serverURL}/api/favorite/${favId}`,{
-                            method: 'delete'
+                            method: 'delete',
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${this.token}`
+                                // "Content-Type": "application/x-www-form-urlencoded",
+                            },
                         }).then((res) => {
                             if (res.status === 200 && res.ok) {
                                 return res.json()
@@ -184,6 +190,7 @@
                     fetch(`${this.serverURL}/api/favorite?memberId=${this.memberId}&persize=${this.persize}&curindex=${this.curindex}&search=${this.searchContent}`)
                     .then((res) => {
                         this.loading = false
+                        this.isInit = true
                         if (res.status === 200 && res.ok) {
                             return res.json()
                         } else {
