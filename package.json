@@ -31,7 +31,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-wevorites",
+    "start": "egg-scripts start --title=egg-server-wevorites",
     "stop": "egg-scripts stop --title=egg-server-wevorites",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
