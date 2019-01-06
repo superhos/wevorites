@@ -19,7 +19,7 @@ module.exports = appInfo => {
 
   config.mongoose = {
     client: {
-      url: 'mongodb://mongo:27019/wevorites',
+      url: 'mongodb://mongo:27017/wevorites',
       options: {},
     },
   };

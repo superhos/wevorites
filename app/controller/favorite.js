@@ -13,6 +13,14 @@ class FavoriteController extends Controller {
       _id: memberId
     }).populate('favorites').exec()
 
+    if (!member) {
+      this.ctx.body = JSON.stringify({
+        state:404,
+        msg: 'Member not exists'
+      })
+      return
+    }
+
     let isAdmin = false
     let isLogin = false
     let selfInfo = {}
