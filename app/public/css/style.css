@@ -3,8 +3,13 @@ html,body {
   padding:0;
 }
 
+*:focus {
+  outline: none;
+}
+
 a {
   text-decoration:none;
+  color: #000;
 }
 
 a:hover {
@@ -20,16 +25,97 @@ header {
   height: 60px;
   width: 100%;
   z-index: 5;
+  color: #FFF;
   padding:0 20px;
   box-sizing: border-box;
+  position: relative;
+}
+
+.center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom;
 }
 
 header .logo {
-  float:left;
   color: #FFF;
   font-size: 25px;
   line-height: 60px;
   font-family: 'Staatliches', cursive;
+  float: left;
+}
+
+header .search-icon {
+  width: 20px;
+  color: #FFF;
+  float: right;
+  margin: 0 15px;
+  cursor: pointer;
+  line-height: 68px;
+}
+
+header .login {
+  float:right;
+  line-height: 68px;
+  cursor: pointer;
+}
+
+header .login.login-info{
+  line-height: 70px;
+}
+
+header .login.login-info img{
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+}
+
+header .tips {
+  position: absolute;
+  right: 5px;
+  top : 70px;
+  background: #FFF;
+  border: 1px solid #000;
+  color: #222;
+  font-size: 13px;
+  padding:3px 5px; 
+  display:inline;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #ccc;
+}
+
+header .tips:hover,header .tips:hover .arrow, header .tips:hover .inside {
+  background: #f7f7f7;
+}
+
+header .tips .arrow {
+  width: 10px;
+  height:10px;
+  transform: rotate(45deg);
+  background: #FFF;
+  border: 1px solid #000;
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  z-index: 0;
+}
+
+header .tips .inside {
+  position: relative;
+  top: -3.5px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: #FFF;
+  padding: 5px 0 0;
 }
 
 .title {
@@ -63,6 +149,25 @@ header .logo {
   margin:0;
 }
 
+.title .search-box {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+}
+
+.title .search-box input {
+  height: 35px;
+  border: 0;
+  font-size: 35px;
+  width: 280px;
+  text-align: center;
+}
+
+.title .search-box input::placeholder {
+  color: #ccc;
+  font-weight: 100;
+}
+
 .content {
   background: #f9f9f9;
   height: 100%;
@@ -81,14 +186,19 @@ header .logo {
 .content .container ul {
   margin: 0;
   list-style: none;
-  padding: 30px 0;
+  padding: 15px 0;
 }
 
 .content .container ul li {
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
-  height:80px;
+  min-height:80px;
+  padding: 5px;
+}
+
+.content .container ul li:hover {
+  background: #fff;
 }
 
 .content .container ul:after {
@@ -108,68 +218,73 @@ header .logo {
   display:flex;
 }
 
-.content .container ul li .block div.state{
-  border:1px solid #df2727;
-  background: #df2727;
-  border-radius: 5px;
-  color:#FFF;
-  width:30px;
+.content .container ul li .block div.state {
+  width:34px;
   font-size:12px;
   height:20px;
   line-height: 20px;
+  padding:3px;
   text-align: center;
   justify-content: flex-start;
 }
 
-.content .container ul li .block div.center {
+.content .container ul li .block div.state span{
+  border:1px solid #df2727;
+  background: #df2727;
+  border-radius: 5px;
+  color:#FFF;
+  padding: 2px;
+}
+
+.content .container ul li .block div.center-content {
   padding: 0 10px;
   width: 100%;
   box-sizing: border-box;
   justify-content: center;
 }
 
-.content .container ul li .block div.center > span {
+.content .container ul li .block div.center-content > span {
   font-size: 16px;
   font-weight: bold;
 }
 
-.content .container ul li .block div.center .meta-info {
+.content .container ul li .block div.center-content .meta-info {
   display: flex;
   align-items: center;
   margin-top:5px;
 }
 
-.content .container ul li .block div.center .meta-info .avatar{
+.content .container ul li .block div.center-content .meta-info .avatar{
   width:22px;
   height:22px;
   border-radius: 50px;
 }
 
-.content .container ul li .block div.center .meta-info span {
+.content .container ul li .block div.center-content .meta-info span {
   font-size: 13px;
   color:#6c6c6c;
   margin-left:8px;
 }
 
-.content .container ul li .block div.center > span:hover {
+.content .container ul li .block div.center-content > span:hover {
   text-decoration: underline;
 }
 
-.content .container ul li .block div.center .foot {
+.content .container ul li .block div.center-content .foot {
   text-align: right;
   font-size: 13px;
   color: #222;
   opacity: 0;
 }
 
-.content .container ul li .block:hover div.center .foot {
+.content .container ul li .block:hover div.center-content .foot {
   animation-name:slideDown;
   animation-duration:1s;
   animation-fill-mode: forwards;
   opacity: 1;
 }
 
-.content .container ul li .block div.center .foot button {
+.content .container ul li .block div.center-content .foot button {
   border:0;
   box-shadow: none;
   background: transparent;
@@ -211,7 +326,7 @@ header .logo {
     opacity: 0;
   }
   to{
-    transform: translateY(0px)
+    transform: translateY(0px);
     opacity: 1;
   }
 }
@@ -219,7 +334,15 @@ header .logo {
 
 @media screen and (max-width: 480px) {
   .title {
-    height: 180px;
+    height: 80px;
+  }
+
+  .title h1 {
+    font-size:30px;
+  }
+
+  .title h4 {
+    font-size:22px;
   }
 
   .content .container {

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%-title%></title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link href="/public/css/font.css" rel="stylesheet">
+</head>
+<body>
+</body>
+ <!-- 使用模板数据 -->
+ <div id="app">
+    <header>
+        <div class="logo">Wevorites</div>
+    </header>
+    <div class="title">
+        <h1>
+            登录成功
+        </h1>
+        <h4>打开了您的宝库</h4>
+    </div>
+    <div class="content">
+        <div class="container">
+            
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            memberInfo: JSON.parse('<%-member%>'),
+        },
+    })
+</script>
+</body>
+</html>

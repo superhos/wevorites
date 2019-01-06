@@ -7,15 +7,40 @@
     <title><%-title%></title>
     <link rel="stylesheet" href="/public/css/style.css">
     <link href="/public/css/font.css" rel="stylesheet">
+    <link href="/public/css/notification.css" rel="stylesheet">
 </head>
 <body>
     <!-- 使用模板数据 -->
     <div id="app">
         <header>
             <div class="logo">Wevorites</div>
+            <!-- before login-->
+            <div class="login" v-show="!isLogin" @click="auth">
+                <svg height="32" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+            </div>
+            <div class="tips" v-show="showTip && !isLogin" @click="showTip = false">
+                <div class="arrow"></div>
+                <div class="inside">
+                    登录后编辑个人r收藏馆
+                </div>
+            </div>
+            <!-- after login -->
+            <div class="login login-info" v-show="isLogin" @click="window.location=serverURL + '/view/' + selfInfo._id">
+                <img :src="selfInfo.avatar_url" />
+            </div>
+            <div class="search-icon" @click="setSearch(!showSearch)" data-type="svg">
+                <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 53.627 53.627" style="enable-background:new 0 0 53.627 53.627;" xml:space="preserve">
+                <path d="M53.627,49.385L37.795,33.553C40.423,30.046,42,25.709,42,21C42,9.42,32.58,0,21,0S0,9.42,0,21s9.42,21,21,21  c4.709,0,9.046-1.577,12.553-4.205l15.832,15.832L53.627,49.385z M2,21C2,10.523,10.523,2,21,2s19,8.523,19,19s-8.523,19-19,19  S2,31.477,2,21z" style="fill: rgb(255, 255, 255);"></path>
+                </svg>
+            </div>
         </header>
         <div class="title">
-            <h1><%-title%>收藏馆</h1>
+            <h1 @click="setSearch(true)" v-show="!showSearch">
+                <%-title%>收藏馆
+            </h1>
+            <div v-show="showSearch" class="search-box">
+                <input ref="search" v-model="searchContent" @blur="setSearch(false)" @keyup.enter="search" type="text" placeholder="搜寻收藏"/>
+            </div>
             <h4>偶然遇到的宝藏</h4>
         </div>
         <div class="content">
@@ -24,49 +49,167 @@
                     <li :key="item._id" v-for="item in list">
                         <div class="block">
                             <div class="state" :class="'state-' + item.state">
-                                {{item.state === 0 ? '未读' : '已读'}}
+                                <span v-if="item.state === 0" >{{item.state === 0 ? '未读' : '已读'}}</span>
                             </div>
-                            <div class="center">
+                            <div class="center-content">
                                 <a :href="item.url" target="_blank">
                                     <span>{{cut(item.title)}}</span>
                                 </a>
-                                    <div class="meta-info">
-                                        <img class="avatar" :src="item.memberId.avatar_url" />
-                                        <span>收藏于 {{moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}}</span>
-                                    </div>
-                                    <div class="foot">
-                                        标记为: <button>已读</button>
-                                    </div>
+                                <div class="meta-info">
+                                    <img class="avatar" :src="item.memberId.avatar_url" />
+                                    <span>收藏于 {{moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}}</span>
+                                </div>
+                                <div class="foot" v-if="isAdmin">
+                                    操作: <button @click="read(item._id, item.state)">{{item.state === 1 ? '未读' : '已读'}}</button>  <button @click="remove(item._id)">删除</button>
                                 </div>
                             </div>
+                        </div>
                     </li>
                 </ul>
+                <div class="center">
+                    <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
+                </div>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"></script>
+    <script src="https://unpkg.com/@saeris/vue-spinners"></script>
+    <script src="/public/js/notification.js"></script>
+    <script src="/public/js/vue-spinner.js"></script>
     <script>
+        var notifier = new AWN();
+        var PulseLoader = VueSpinner.PulseLoader
         var app = new Vue({
             el: '#app',
             data: {
                 list: [],
                 serverURL: '<%-webServer%>',
                 memberId: '<%-memberId%>',
-                memberInfo: JSON.parse('<%-member%>')
+                showTip: true,
+                loading : false,
+                color: '#525252',
+                size: '15',
+                showSearch: false,
+                searchContent: '',
+                isAdmin: !('false' === '<%-isAdmin%>'),
+                isLogin: !('false' === '<%-isLogin%>'),
+                token: '<%-token%>',
+                canLoad: true,
+                clientId: '<%-clientId%>',
+                selfInfo: JSON.parse('<%-selfInfo%>'),
+                memberInfo: JSON.parse('<%-member%>'),
+                persize: 6,
+                curindex: 0
             },
             mounted () {
-                fetch(`${this.serverURL}/list/${this.memberId}`).then((res) => {
-                    if (res.status === 200 && res.ok) {
-                        return res.json()
-                    } else {
-                        console.err('NetworkError')
-                    }
-                }).then(jsonRes => {
-                    this.list = jsonRes
-                })
+                this.load()
+                setTimeout(() => this.showTip = false, 5000)
+           
+                // 增加滚动到底部加载
+                window.onload = () => window.addEventListener('scroll', this.handleScroll)
             },
             methods: {
+                setSearch (state) {
+                    this.showSearch = state
+                    if (state && this.$refs.search) {
+                        setTimeout(() => 
+                        {
+                            this.$refs.search.focus()
+                        }, 0);
+                    }
+                },
+                auth () {
+                    window.location = `https://github.com/login/oauth/authorize?scope=user&client_id=${this.clientId}&state=login_web`
+                },
+                read (favId, currentState) {
+                    const target = +currentState === 0 ? 1: 0
+                    fetch(`${this.serverURL}/api/favorite/${favId}`,{
+                        method: 'put',
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${this.token}`
+                            // "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: JSON.stringify({
+                            favData: {
+                                state: target
+                            }
+                        })
+                    }).then((res) => {
+                        if (res.status === 200 && res.ok) {
+                            return res.json()
+                        } else {
+                            console.err('NetworkError')
+                        }
+                    }).then(jsonRes => {
+                        if (+jsonRes.state === 200) {
+                            notifier.success(`设置阅读状态成功`)
+                            // this.list = this.list.filter(e => e._id !== favId)
+                            const fav = this.list.find(e => e._id === favId).state = target
+                        } else {
+                            notifier.warning(`设置阅读状态失败`)
+                        }
+                    })
+                },
+                remove (favId) {
+                    notifier.confirm('确认移除该收藏?', () => {
+                        fetch(`${this.serverURL}/api/favorite/${favId}`,{
+                            method: 'delete'
+                        }).then((res) => {
+                            if (res.status === 200 && res.ok) {
+                                return res.json()
+                            } else {
+                                console.err('NetworkError')
+                            }
+                        }).then(jsonRes => {
+                            if (+jsonRes.state === 200) {
+                                notifier.success('移除成功')
+                                this.list = this.list.filter(e => e._id !== favId)
+                            } else {
+                                notifier.warning('移除失败')
+                            }
+                        })
+                    }, () => {})
+                },
+                search () {
+                    this.curindex = 0
+                    this.list = []
+                    this.canLoad = true
+                    this.load()
+                },
+                load () {
+                    if (this.loading) return
+                    this.loading = true
+                    fetch(`${this.serverURL}/api/favorite?memberId=${this.memberId}&persize=${this.persize}&curindex=${this.curindex}&search=${this.searchContent}`)
+                    .then((res) => {
+                        this.loading = false
+                        if (res.status === 200 && res.ok) {
+                            return res.json()
+                        } else {
+                            console.err('NetworkError')
+                        }
+                    }).then(jsonRes => {
+                        if (+jsonRes.state === 200) {
+                            if (jsonRes.data.length === 0) this.canLoad = false
+                            console.log(this.list)
+                            this.list = [
+                                ...this.list,
+                                ...jsonRes.data
+                            ]
+                            console.log(this.list)
+                            this.curindex += this.persize
+                        } else {
+                            notifier.warning('加载失败')
+                        }
+                    })
+                },
+                handleScroll () {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+                    if (window.innerHeight + scrollTop >= document.body.scrollHeight && this.canLoad) {
+                        this.load()
+                    }
+                },
                 cut (str) {
                     let len = 0
                     let res = ""
@@ -78,7 +221,7 @@
                             len ++
                         }
 
-                        if (len >= 60) {
+                        if (len >= 80) {
                             res = '...'
                             break
                         }

@@ -6,6 +6,8 @@ module.exports = app => {
     "sessionKey" : { type: String }, // key 为当前微信userName
     "sessionMember": { type: Schema.Types.ObjectId, ref: 'Member' },
     "value": {type: Object},
+    "token": {type: String},
+    "loginType": {type: String},
     "create_at": { type: Date, default: Date.now },
   })
   

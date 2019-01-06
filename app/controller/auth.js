@@ -1,6 +1,7 @@
 'use strict';
 const Controller = require('egg').Controller;
 const Identity = require('../service/identity')
+const uuidv4 = require('uuid/v4')
 
 class AuthController extends Controller {
   async authenticate () {
@@ -19,16 +20,29 @@ class AuthController extends Controller {
     // 检查member是否存在
     const member = await this.checkAndSave(userInfo)
 
-     // 保存 session
+    // 保存 session
     const session = new this.ctx.model.Session({
-      "sessionKey" : wechatUserName, // key 为当前微信userName
+      "sessionKey" : wechatUserName !== 'login_web' ? wechatUserName : uuidv4(), // key 为当前微信userName
       "sessionMember": member._id,
+      "loginType" : wechatUserName !== 'login_web' ? 'wechat' : 'web',
+      "token": token,
       "value": {isLogin: true},
     })
-
+    
     await session.save()
-
-    this.ctx.body = session
+    
+    if (wechatUserName !== 'login_web') {
+      // this.ctx.body = session
+      let title = `${member.name}`; //向模板传入数据
+      await this.ctx.render('login_success',{
+        member: JSON.stringify(member),
+        title,
+      })
+    } else {
+      // web version
+      this.ctx.session.info = session
+      this.ctx.redirect(`/view/${member._id}`)
+    }
     // return res
   }
 
