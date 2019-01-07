@@ -13,6 +13,7 @@
     <!-- 使用模板数据 -->
     <div id="app">
         <header>
+            <a href="https://github.com/superhos/wevorites"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
             <div class="logo">Wevorites</div>
             <!-- before login-->
             <div class="login" v-show="!isLogin" @click="auth">
@@ -21,7 +22,7 @@
             <div class="tips" v-show="showTip && !isLogin" @click="showTip = false">
                 <div class="arrow"></div>
                 <div class="inside">
-                    登录后编辑个人r收藏馆
+                    登录后编辑个人收藏馆
                 </div>
             </div>
             <!-- after login -->
@@ -45,7 +46,7 @@
         </div>
         <div class="content">
             <div class="container">
-                <ul>
+                <ul v-if="isInit">
                     <li :key="item._id" v-for="item in list">
                         <div class="block">
                             <div class="state" :class="'state-' + item.state">
@@ -100,12 +101,14 @@
                 selfInfo: JSON.parse('<%-selfInfo%>'),
                 memberInfo: JSON.parse('<%-member%>'),
                 persize: 6,
-                curindex: 0
+                curindex: 0,
+                isInit: false
             },
-            mounted () {
-                this.load()
+            async mounted () {
+                await this.load()
                 setTimeout(() => this.showTip = false, 5000)
-           
+                
+                this.isInit = true
                 // 增加滚动到底部加载
                 window.onload = () => window.addEventListener('scroll', this.handleScroll)
             },
@@ -177,42 +180,44 @@
                         })
                     }, () => {})
                 },
-                search () {
+                async search () {
                     this.curindex = 0
                     this.list = []
                     this.canLoad = true
-                    this.load()
+                    await this.load()
                 },
                 load () {
                     if (this.loading) return
                     this.loading = true
-                    fetch(`${this.serverURL}/api/favorite?memberId=${this.memberId}&persize=${this.persize}&curindex=${this.curindex}&search=${this.searchContent}`)
-                    .then((res) => {
-                        this.loading = false
-                        if (res.status === 200 && res.ok) {
-                            return res.json()
-                        } else {
-                            console.err('NetworkError')
-                        }
-                    }).then(jsonRes => {
-                        if (+jsonRes.state === 200) {
-                            if (jsonRes.data.length === 0) this.canLoad = false
-                            console.log(this.list)
-                            this.list = [
-                                ...this.list,
-                                ...jsonRes.data
-                            ]
-                            console.log(this.list)
-                            this.curindex += this.persize
-                        } else {
-                            notifier.warning('加载失败')
-                        }
+                    return new Promise((resolve, reject) => {
+                        fetch(`${this.serverURL}/api/favorite?memberId=${this.memberId}&persize=${this.persize}&curindex=${this.curindex}&search=${this.searchContent}`)
+                        .then((res) => {
+                            this.loading = false
+                            if (res.status === 200 && res.ok) {
+                                return res.json()
+                            } else {
+                                console.err('NetworkError')
+                            }
+                        }).then(jsonRes => {
+                            if (+jsonRes.state === 200) {
+                                if (jsonRes.data.length === 0) this.canLoad = false
+                                this.list = [
+                                    ...this.list,
+                                    ...jsonRes.data
+                                ]
+                                console.log(this.list)
+                                this.curindex += this.persize
+                            } else {
+                                notifier.warning('加载失败')
+                            }
+                            resolve()
+                        })                 
                     })
                 },
-                handleScroll () {
+                async handleScroll () {
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
                     if (window.innerHeight + scrollTop >= document.body.scrollHeight && this.canLoad) {
-                        this.load()
+                        await this.load()
                     }
                 },
                 cut (str) {

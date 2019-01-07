@@ -13,3 +13,4 @@ run/
 *.un~
 .env
 .history/
+data/*

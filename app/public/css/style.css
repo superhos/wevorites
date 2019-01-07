@@ -45,10 +45,11 @@ header {
 
 header .logo {
   color: #FFF;
-  font-size: 25px;
+  font-size: 30px;
   line-height: 60px;
   font-family: 'Staatliches', cursive;
-  float: left;
+  display: flex;
+  justify-content: center;
 }
 
 header .search-icon {
