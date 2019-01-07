@@ -41,7 +41,7 @@
 		src="https://img.shields.io/badge/docker-18.06.0-orange.svg">
   <img
 		alt="Vue.js"
-		src="https://img.shields.io/badge/Vue.js-18.06.0-brightgreen.svg">
+		src="https://img.shields.io/badge/Vue.js-2.5.20-brightgreen.svg">
 </p>
 
 <p align="center">
