@@ -6,7 +6,7 @@
 </h1>
 
 <h3 align="center">
-	基于微信聊天机器人内容收藏应用
+	基于微信聊天机器人为入口内容收藏应用
 </h3>
 
 <p align="center">
@@ -18,8 +18,7 @@
 </p>
 
 <p align="center">
-  <span>微信机器人</span>
-  <a href="https://github.com/superhos/wevorites-bot">项目地址</a>
+  <span>微信机器人</span><a href="https://github.com/superhos/wevorites-bot">项目地址</a>
   <br />
   <span>DEMO</span>
   <br />
@@ -55,10 +54,13 @@
 
 Wevorites主要通过微信聊天机器人作为日常文章收藏的入口，再提供应用服务生成个人的收藏馆页面。具体流程如下：
 
-<img
-		width="500"
-		alt="Flow"
-		src="https://raw.githubusercontent.com/superhos/wevorites/master/doc/img/flow.jpg?sanitize=true">
+<p align="center">
+	<img 	src="https://raw.githubusercontent.com/superhos/wevorites/master/doc/img/flow.jpeg?sanitize=true" width="550">
+</p>
+
+<p align="center">
+	<img 	src="https://raw.githubusercontent.com/superhos/wevorites/master/doc/img/screen.jpeg?sanitize=true" width="200">
+</p>
 
 目前接受公众号分享连接，知乎小程序分享连接，掘金分享连接以及普通网页链接等。
 另外，由于web版本微信每次登录获取其他用户的uuid都为0，而UserName每次都会更新，因此引用了**Github Auth**作为用户认证。
