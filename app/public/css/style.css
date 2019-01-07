@@ -48,8 +48,7 @@ header .logo {
   font-size: 30px;
   line-height: 60px;
   font-family: 'Staatliches', cursive;
-  display: flex;
-  justify-content: center;
+  float:left;
 }
 
 header .search-icon {
