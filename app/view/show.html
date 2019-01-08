@@ -46,7 +46,7 @@
         </div>
         <div class="content">
             <div class="container">
-                <ul v-if="isInit">
+                <ul v-if="isInit && list.length > 0">
                     <li :key="item._id" v-for="item in list">
                         <div class="block">
                             <div class="state" :class="'state-' + item.state">
