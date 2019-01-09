@@ -216,7 +216,7 @@
                 },
                 async handleScroll () {
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
-                    if (window.innerHeight + scrollTop >= （ document.body.scrollHeight - 100） && this.canLoad) {
+                    if (window.innerHeight + scrollTop >= (document.body.scrollHeight - 100) && this.canLoad) {
                         await this.load()
                     }
                 },
