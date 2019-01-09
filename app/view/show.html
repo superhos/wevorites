@@ -110,7 +110,7 @@
                 
                 this.isInit = true
                 // 增加滚动到底部加载
-                window.onload = () => window.addEventListener('scroll', this.handleScroll)
+                window.addEventListener('scroll', () => this.handleScroll())
             },
             methods: {
                 setSearch (state) {
@@ -216,6 +216,7 @@
                 },
                 async handleScroll () {
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+                    console.log('scrolling')
                     if (window.innerHeight + scrollTop >= (document.body.scrollHeight - 100) && this.canLoad) {
                         await this.load()
                     }
