@@ -13,7 +13,7 @@
 	<strong>
 		<a href="https://github.com/superhos/wevorites">Doc</a>
 		•
-		<a href="https://wevorites.chenhaotaishuaile.com/view/5c32c9c4e56ce8002b50760d">Demo</a>
+		<a href="https://wevorites.chenhaotaishuaile.com/view/5c322c6fb29698002ba4396f">Demo</a>
 	</strong>
 </p>
 
